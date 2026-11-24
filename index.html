@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hotel Concierge</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600;1,700&family=Inter:ital,wght@0,400;0,500;0,600;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{--bg:#faf8f3;--card:#fffdf9;--ink:#2b1d1f;--mut:#7a6a66;--bur:#6b8a6e;--gold:#b8923e;--line:#e6dccd;--ok:#2f7a4d;--bad:#a33;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c1214;--card:#271a1d;--ink:#f3e9dc;--mut:#b5a29a;--bur:#9cb89f;--line:#3d2a2e;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1c1214;--card:#271a1d;--ink:#f3e9dc;--mut:#b5a29a;--bur:#9cb89f;--line:#3d2a2e;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,sans-serif}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;margin:0}
+header{background:#efe4d0;color:#3b2f2a;padding:28px 20px 22px;text-align:center;border-bottom:3px solid #87a28a}
+header h1{font-size:34px;letter-spacing:.04em}header p{margin:4px 0 0;color:#7a6a66;font-size:13px;letter-spacing:.2em;text-transform:uppercase}
+nav{display:flex;gap:6px;overflow-x:auto;padding:10px 12px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+nav button{flex:none;border:0;background:none;color:var(--mut);padding:8px 14px;border-radius:99px;font:500 14px Inter,sans-serif;cursor:pointer}
+nav button.on{background:var(--bur);color:#fff}
+main{max-width:920px;margin:0 auto;padding:18px 14px 60px;animation:f .4s}@keyframes f{from{opacity:0;transform:translateY(8px)}}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 4px 16px rgba(80,30,30,.06)}
+.card h3{color:var(--bur);font-size:22px;margin-bottom:8px}.row{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px dashed var(--line)}.row:last-child{border:0}.row span:first-child{color:var(--mut)}
+.gold{color:var(--gold)}.btn{border:0;background:var(--bur);color:#fff;padding:9px 16px;border-radius:10px;font:500 14px Inter,sans-serif;cursor:pointer;transition:.2s}.btn:hover{filter:brightness(1.15);transform:translateY(-1px)}
+.btn.g{background:var(--gold)}.btn.o{background:none;color:var(--bur);border:1px solid var(--bur)}.btn.r{background:var(--bad)}.btn.s{padding:5px 10px;font-size:13px}
+input,textarea,select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}textarea{min-height:90px}
+label{display:block;font-size:12px;color:var(--mut);margin:10px 0 4px;text-transform:uppercase;letter-spacing:.08em}
+.chip{font-size:12px;padding:2px 10px;border-radius:99px;background:var(--line);white-space:nowrap}.chip.pending{background:#f3dfa8;color:#6a4a00}.chip.accepted{background:#cfe0f5;color:#1d4a80}.chip.completed{background:#cdebd8;color:#1d5a37}.chip.rejected{background:#f2cccc;color:#8a2020}
+.qty{display:flex;align-items:center;gap:10px}.qty button{width:30px;height:30px;border-radius:50%;border:1px solid var(--gold);background:none;color:var(--ink);cursor:pointer;font-size:16px}
+.chat{height:340px;overflow:auto;display:flex;flex-direction:column;gap:8px;padding:6px}.m{max-width:82%;padding:9px 13px;border-radius:14px;background:var(--bg);white-space:pre-wrap}.m.guest{align-self:flex-end;background:var(--bur);color:#fff}.m.staff{background:#e9d8a6;color:#2b1d1f}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:99px;z-index:9}
+.qrs{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}.qrs .card{text-align:center}.qrs .q{display:flex;justify-content:center;margin:8px 0;background:#fff;padding:8px;border-radius:8px}
+.center{text-align:center;padding:60px 20px}
+:root{--bg:#faf8f4;--card:#fffefb;--ink:#2b2622;--mut:#7d746c;--bur:#587a5d;--gold:#a8842f;--line:#ebe4d6;--sh:0 1px 2px rgba(60,45,30,.05),0 14px 32px -16px rgba(60,45,30,.22)}
+body{font-size:15.5px;line-height:1.65;-webkit-font-smoothing:antialiased}
+h1,h2,h3{letter-spacing:.01em}
+header{background:linear-gradient(180deg,#f0e6d0,#e7dbc0);padding:46px 24px 38px;border-bottom:0}
+header::after{content:"";display:block;width:64px;height:2px;background:var(--gold);margin:22px auto 0;border-radius:2px}
+header h1{font-size:clamp(36px,7vw,56px);line-height:1.1;letter-spacing:.02em;font-weight:600}
+header p{margin:10px 0 0;font:italic 500 21px "Cormorant Garamond",Georgia,serif;letter-spacing:.02em;text-transform:none;color:#6f604f}
+nav{justify-content:safe center;gap:6px;padding:12px 16px;background:color-mix(in srgb,var(--card) 90%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav button{padding:9px 18px}nav button.on{box-shadow:0 6px 14px -6px rgba(88,122,93,.7)}
+main{max-width:980px;padding:34px 20px 90px;animation:none}
+.grid{gap:22px;grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.card{border-radius:20px;padding:26px;box-shadow:var(--sh)}
+.card h3{font-size:28px;margin-bottom:16px}.card h3::after{content:"";display:block;width:28px;height:2px;background:var(--gold);margin-top:8px}
+.card.center h3::after{margin-left:auto;margin-right:auto}
+.row{padding:13px 0;border-bottom:1px solid var(--line)}.row b{font-weight:600}
+.btn{border-radius:12px;padding:11px 22px;letter-spacing:.02em;box-shadow:0 8px 16px -10px rgba(50,80,55,.8)}
+.btn.s{padding:6px 13px;border-radius:9px;box-shadow:none}.btn.o{box-shadow:none}
+input,textarea,select{padding:12px 14px;border-radius:12px;background:var(--card);transition:border-color .2s,box-shadow .2s}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--bur);box-shadow:0 0 0 3px color-mix(in srgb,var(--bur) 25%,transparent)}
+button:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+label{text-transform:none;letter-spacing:.01em;font-size:13px;margin:16px 0 6px}
+.chip{padding:3px 12px;font-weight:500}
+.qty{gap:12px}.qty button{width:34px;height:34px;border-color:var(--gold)}
+.chat{gap:10px;padding:12px;background:var(--bg);border-radius:14px}
+.m{background:var(--card);border:1px solid var(--line);padding:10px 15px;border-radius:16px 16px 16px 4px}
+.m.guest{background:var(--bur);border-color:var(--bur);border-radius:16px 16px 4px 16px}
+.m.staff{background:#eadfb8;border-color:#e0d29a;color:#2b2622}
+.gold{font:italic 500 18px "Cormorant Garamond",Georgia,serif}
+.center{padding:64px 24px}
+@media(max-width:600px){header{padding:34px 18px 28px}main{padding:22px 14px 80px}.card{padding:20px}}
+/* animations */
+.card{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1),box-shadow .35s,border-color .35s}
+.card.in{opacity:1;transform:none}
+.card.in:hover{transform:translateY(-4px);box-shadow:0 2px 4px rgba(60,45,30,.06),0 24px 40px -18px rgba(60,45,30,.3);border-color:color-mix(in srgb,var(--gold) 55%,var(--line))}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+header.hd h1{animation:rise .8s cubic-bezier(.2,.7,.2,1) both}
+header.hd p{animation:rise .8s .15s cubic-bezier(.2,.7,.2,1) both}
+header.hd::after{animation:grow .9s .3s cubic-bezier(.2,.7,.2,1) both}
+@keyframes grow{from{width:0;opacity:0}to{width:64px;opacity:1}}
+nav button{transition:background .25s,color .25s,box-shadow .25s,transform .2s}
+nav button:not(.on):hover{background:color-mix(in srgb,var(--bur) 12%,transparent);color:var(--bur)}
+nav button:active{transform:scale(.95)}
+.btn{transition:filter .2s,transform .2s,box-shadow .25s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 20px -10px rgba(50,80,55,.85)}
+.btn:active{transform:scale(.96);box-shadow:none}
+.row{transition:padding-left .25s,background .25s}
+.row:hover{padding-left:8px}
+.qty button{transition:transform .2s,background .2s,color .2s}
+.qty button:hover{background:var(--gold);color:#fff;transform:scale(1.12)}
+.qty button:active{transform:scale(.9)}
+.chip{transition:background .3s,color .3s}
+.qrs .q{transition:transform .3s}.qrs .card:hover .q{transform:scale(1.05)}
+@keyframes tin{from{opacity:0;transform:translate(-50%,14px)}}
+.toast{animation:tin .35s cubic-bezier(.2,.7,.2,1)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.card{opacity:1;transform:none}}
+/* night: dark premium, purple + cyan */
+:root[data-theme="night"]{--bg:#0d0b1a;--card:#161228;--ink:#efeaff;--mut:#a79fc4;--bur:#7c4dff;--gold:#22d3ee;--line:#2a2447;--sh:0 1px 0 rgba(255,255,255,.03) inset,0 22px 40px -22px rgba(0,0,0,.8);color-scheme:dark}
+[data-theme="night"] body{background:radial-gradient(900px 520px at 88% -8%,rgba(124,77,255,.22),transparent 70%),radial-gradient(720px 420px at -8% 28%,rgba(34,211,238,.09),transparent 70%),var(--bg);background-attachment:fixed}
+[data-theme="night"] header{background:radial-gradient(ellipse at 50% 0%,#33207a 0%,#15102f 62%,#0d0b1a 100%);color:#f3eeff}
+[data-theme="night"] header h1{background:linear-gradient(90deg,#c4b5fd,#67e8f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+[data-theme="night"] header p{color:#a5b4fc}
+[data-theme="night"] header::after{background:linear-gradient(90deg,#7c4dff,#22d3ee);box-shadow:0 0 14px rgba(34,211,238,.6)}
+[data-theme="night"] nav{background:rgba(13,11,26,.82);border-bottom-color:var(--line)}
+[data-theme="night"] nav button.on{box-shadow:0 0 20px -2px rgba(124,77,255,.75)}
+[data-theme="night"] nav button:not(.on):hover{color:#67e8f9;background:rgba(34,211,238,.1)}
+[data-theme="night"] .card{border-color:var(--line)}
+[data-theme="night"] .card.in:hover{border-color:rgba(34,211,238,.5);box-shadow:0 0 30px -8px rgba(124,77,255,.55),0 24px 40px -20px rgba(0,0,0,.8)}
+[data-theme="night"] .card h3{color:#c4b5fd}
+[data-theme="night"] .card h3::after{background:linear-gradient(90deg,#7c4dff,#22d3ee)}
+[data-theme="night"] .btn:not(.g):not(.o):not(.r){background:linear-gradient(135deg,#8b5cf6,#6d3df0)}
+[data-theme="night"] .btn.g{color:#052a33}
+[data-theme="night"] .btn.o{color:#c4b5fd;border-color:#7c4dff}
+[data-theme="night"] .btn:hover{box-shadow:0 0 22px -4px rgba(124,77,255,.8)}
+[data-theme="night"] a{color:#67e8f9}
+[data-theme="night"] .gold{color:#67e8f9}
+[data-theme="night"] .qty button{border-color:#22d3ee;color:var(--ink)}
+[data-theme="night"] .qty button:hover{background:#22d3ee;color:#052a33}
+[data-theme="night"] .chip{background:rgba(167,159,196,.15)}
+[data-theme="night"] .chip.pending{background:rgba(250,204,21,.15);color:#fde68a}
+[data-theme="night"] .chip.accepted{background:rgba(34,211,238,.15);color:#67e8f9}
+[data-theme="night"] .chip.completed{background:rgba(52,211,153,.15);color:#6ee7b7}
+[data-theme="night"] .chip.rejected{background:rgba(248,113,113,.15);color:#fca5a5}
+[data-theme="night"] .m.guest{background:linear-gradient(135deg,#8b5cf6,#6d3df0);border-color:transparent}
+[data-theme="night"] .m.staff{background:rgba(34,211,238,.14);border-color:rgba(34,211,238,.4);color:#cffafe}
+[data-theme="night"] input,[data-theme="night"] textarea,[data-theme="night"] select{background:#0f0c20}
+#tt{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:8;border-radius:99px;padding:8px 14px}
+/* guest shell */
+.shell{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+.side{background:#efe4d0;color:#3b2f2a;padding:28px 16px;display:flex;flex-direction:column;gap:18px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{text-align:center;padding-bottom:16px;border-bottom:1px solid rgba(60,45,30,.15)}.brand h1{font-size:28px;line-height:1.15}.brand p{margin:4px 0 0;font:italic 500 16px "Cormorant Garamond",Georgia,serif;color:#6f604f}
+.sn{display:flex;flex-direction:column;gap:4px}
+.sn button{display:flex;align-items:center;gap:12px;border:0;background:none;color:#3b2f2a;padding:11px 14px;border-radius:12px;font:500 14px Inter,sans-serif;cursor:pointer;text-align:left;transition:background .25s,color .25s,transform .2s}
+.sn button i{font-style:normal;width:22px;text-align:center}.sn button:hover{background:rgba(88,122,93,.16);transform:translateX(3px)}.sn button.on{background:#587a5d;color:#fff;transform:none}
+.wf{margin-top:auto;background:rgba(255,255,255,.6);border-radius:14px;padding:12px 14px;font-size:13px;display:flex;flex-direction:column;gap:2px}
+.stage{min-width:0}.stage main{max-width:1100px;margin:0 auto;padding:18px 24px 80px}
+.top{display:flex;justify-content:flex-end;align-items:center;gap:18px;padding:18px 28px 0;color:var(--mut);font-size:14px}.top b{color:var(--ink);font:600 22px "Cormorant Garamond",Georgia,serif}.tn{display:none;margin-right:auto;font:600 20px "Cormorant Garamond",Georgia,serif;color:var(--ink)}
+.hero{border-radius:26px;overflow:hidden;background-size:cover;background-position:center;padding:46px 40px 32px;color:#fff;display:flex;flex-direction:column;gap:34px;min-height:540px;background-color:#2f3f33;background-image:linear-gradient(160deg,#4d6a52,#1f2a22);box-shadow:var(--sh)}
+.hc h2{font-size:clamp(26px,4vw,40px);letter-spacing:.08em;font-weight:500}.hc h1{font-size:clamp(54px,9vw,96px);letter-spacing:.06em;color:#e3c585;line-height:1}.rn{margin:8px 0 14px;letter-spacing:.14em;font-weight:500}.hc p{max-width:380px;color:rgba(255,255,255,.86);margin:0}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:auto}
+.tile{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(10px);color:#fff;border-radius:18px;padding:22px 14px 12px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;font:inherit;transition:transform .25s,background .25s}
+.tile:hover{transform:translateY(-4px);background:rgba(255,255,255,.2)}.tile:active{transform:scale(.97)}
+.tile i{font-style:normal;width:54px;height:54px;border-radius:50%;border:1.5px solid #e3c585;display:grid;place-items:center;font-size:24px}
+.tile b{font:600 21px "Cormorant Garamond",Georgia,serif;margin-top:6px}.tile small{font-size:12px;opacity:.82;min-height:32px}.tile span{font-size:22px;color:#e3c585}
+.qrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-top:16px}
+.qk{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 10px;color:var(--ink);font:500 14px Inter,sans-serif;cursor:pointer;box-shadow:var(--sh);transition:transform .25s,border-color .25s}
+.qk:hover{transform:translateY(-3px);border-color:var(--gold)}.qk i{font-style:normal}
+@media(max-width:860px){.shell{grid-template-columns:1fr}.side{position:sticky;top:env(safe-area-inset-top,0px);height:auto;z-index:6;flex-direction:row;padding:10px;overflow-x:auto;gap:8px}.brand,.wf{display:none}.sn{flex-direction:row}.sn button{white-space:nowrap;padding:9px 14px}.tn{display:block}.tiles{grid-template-columns:repeat(2,1fr)}.hero{padding:30px 20px 20px;min-height:0}.top{padding:12px 16px 0}.stage main{padding:14px 14px 80px}}
+/* linen beige, moss, peony pink */
+:root{--bg:#f1e9dc;--card:#faf6ee;--ink:#2e3322;--mut:#7a7863;--bur:#5a6b3b;--gold:#c0587a;--line:#e2d6c1}
+header{background:linear-gradient(180deg,#ebe0cb,#e2d5bb)}
+.side{background:#e8dcc6;color:#2e3322}
+.brand h1{color:#4a5a2e}.brand p{color:#8a6a6f}
+.sn button{color:#3a4128}.sn button:hover{background:rgba(90,107,59,.14)}
+.sn button.on{background:#5a6b3b;color:#fff;box-shadow:inset 3px 0 0 #e58aa3}
+.wf{background:rgba(250,246,238,.78);border:1px solid #e9b9c6}
+.hero{background-color:#3f4d29;background-image:radial-gradient(380px 260px at 88% 6%,rgba(229,138,163,.5),transparent 70%),radial-gradient(340px 280px at 100% 100%,rgba(244,182,200,.28),transparent 70%),linear-gradient(160deg,#667a44,#2f3b1f)}
+.hc h1{color:#f6b8ca}
+.tile i{border-color:#f4b6c8}.tile span{color:#f6b8ca}.tile:hover{background:rgba(246,184,202,.22)}
+.qk:hover{border-color:#e58aa3;background:#f8e6ec}
+.m.staff{background:#f6dbe3;border-color:#ecc3cf;color:#3a2a30}
+.top b{color:#5a6b3b}
+.sec{margin:34px 0 16px;font-size:32px;color:var(--bur)}
+/* bold italic everywhere */
+*{font-style:italic!important;font-weight:600!important}
+body h1,body h2,body h3,body b,body strong{font-weight:700!important}
+</style></head><body>
+<div id="app"><div class="center"><h2>Loading…</h2></div></div><div id="toast"></div>
+<script type="module">
+import * as fb from "./fb.js";
+let db,user,sample,canEdit=false,uid=null,prof=null,subs=[],A={},S={},me=null,lvl=false,H=null,R={},reqs=[],chats={},tab=null,cart={},busy=false,pick="",sel="all";
+const $=s=>document.querySelector(s),esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const L=s=>String(s||"").split("\n").map(x=>x.trim()).filter(Boolean).map(l=>l.split("|").map(x=>x.trim()));
+const tm=t=>new Date(t).toLocaleString([],{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});
+const toast=t=>{$("#toast").innerHTML=`<div class="toast">${esc(t)}</div>`;setTimeout(()=>$("#toast").innerHTML="",2400)};
+const route=()=>{const h=location.hash.slice(1);if(h.startsWith("r-")){const[,room,code]=h.split("-");return{mode:"guest",room,code}}return{mode:["admin","reception","staff"].includes(h)?h:"home"}};
+const fields=[["name","Hotel name"],["tagline","Tagline"],["wifi","Wi-Fi name & password"],["hours","Timings & property info (Label|Value per line)"],["services","Guest services (Name|Description per line)"],["facilities","Facilities (Name|Details|Timings per line)"],["offers","Offers (Title|Description per line)"],["explore","Nearby attractions (Place|Description per line)"],["contacts","Contacts (Department|Number per line)"],["policies","Policies (Title|Text per line)"],["items","Housekeeping items (one per line)"]];
+let per="day";
+const nm=id=>(S[id]||{}).name||"";
+function statsHTML(){
+  const N={day:14,week:8,month:6}[per],now=new Date();
+  const start=(d,p)=>{const x=new Date(d);x.setHours(0,0,0,0);if(p==="week")x.setDate(x.getDate()-((x.getDay()+6)%7));if(p==="month")x.setDate(1);return x};
+  const step=(d,p,n)=>{const x=new Date(d);if(p==="day")x.setDate(x.getDate()+n);else if(p==="week")x.setDate(x.getDate()+7*n);else x.setMonth(x.getMonth()+n);return x};
+  const first=step(start(now,per),per,-(N-1)),bk=Array.from({length:N},(_,i)=>step(first,per,i));
+  const lbl=d=>per==="month"?d.toLocaleDateString([],{month:"short",year:"2-digit"}):d.toLocaleDateString([],{day:"numeric",month:"short"});
+  const win=reqs.filter(r=>r.ts>=first.getTime());
+  const counts=bk.map((b,i)=>{const e=i+1<N?bk[i+1].getTime():Infinity;return win.filter(r=>r.ts>=b.getTime()&&r.ts<e).length}),dcounts=bk.map((b,i)=>{const e=i+1<N?bk[i+1].getTime():Infinity;return reqs.filter(r=>r.status==="completed"&&(r.doneAt||r.ts)>=b.getTime()&&(r.doneAt||r.ts)<e).length}),max=Math.max(1,...counts,...dcounts),today=reqs.filter(r=>r.status==="completed"&&(r.doneAt||r.ts)>=start(now,"day").getTime()).length;
+  const done=win.filter(r=>r.status==="completed"),ts=done.filter(r=>r.doneAt).map(r=>r.doneAt-r.ts);
+  const avg=ts.length?Math.round(ts.reduce((a,b)=>a+b,0)/ts.length/60000):null;
+  const tally=(l,f)=>Object.entries(l.reduce((o,r)=>{const k=f(r);if(k)o[k]=(o[k]||0)+1;return o},{})).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const list=l=>l.map(([k,v])=>`<div class="row"><span style="color:inherit">${esc(k)}</span><b>${v}</b></div>`).join("")||"<p>No data yet.</p>";
+  const chatN=Object.values(chats).reduce((n,ms)=>n+ms.filter(m=>m.r==="guest"&&m.ts>=first.getTime()).length,0);
+  const kp=(v,l)=>`<div class="card"><h3>${v}</h3><p>${l}</p></div>`;
+  const win_={day:"Last 14 days",week:"Last 8 weeks",month:"Last 6 months"}[per];
+  return `<p style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${[["day","Daily"],["week","Weekly"],["month","Monthly"]].map(([k,l])=>`<button class="btn s ${per===k?"":"o"}" data-per="${k}">${l}</button>`).join("")}<span style="color:var(--mut)">${win_}</span></p>
+  <div class="grid">${kp(today,"Tasks completed today")}${kp(win.length,"Requests received")}${kp(done.length,"Completed")}${kp(win.filter(r=>r.status==="pending").length,"Still pending")}${kp(win.filter(r=>r.status==="rejected").length,"Rejected")}${kp(avg===null?"–":avg<60?avg+" min":(avg/60).toFixed(1)+" h","Average time to complete")}${kp(chatN,"Guest chat messages")}</div>
+  <div class="card" style="margin-top:20px"><h3>Requests and completed tasks</h3><p><span style="color:var(--gold)">■</span> Received &nbsp; <span style="color:var(--bur)">■</span> Completed</p><div style="display:flex;align-items:flex-end;gap:6px;overflow-x:auto;padding-top:8px">${counts.map((c,i)=>`<div style="flex:1;min-width:44px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end"><small>${c} / <b>${dcounts[i]}</b></small><div style="display:flex;align-items:flex-end;gap:3px;width:100%;justify-content:center"><div style="width:42%;height:${Math.round(c/max*140)+2}px;background:var(--gold);border-radius:5px 5px 0 0"></div><div style="width:42%;height:${Math.round(dcounts[i]/max*140)+2}px;background:var(--bur);border-radius:5px 5px 0 0"></div></div><small style="white-space:nowrap">${lbl(bk[i])}</small></div>`).join("")}</div></div>
+  <div class="grid" style="margin-top:20px"><div class="card"><h3>By request type</h3>${list(tally(win,r=>r.type))}</div><div class="card"><h3>Busiest rooms</h3>${list(tally(win,r=>"Room "+r.room))}</div><div class="card"><h3>Tasks completed by staff</h3>${list(tally(done,r=>nm(r.to)||r.toName))}</div><div class="card"><h3>Most requested items</h3>${list(tally(win,r=>r.items))}</div></div>`}
+const ck=room=>room.replace(/[^A-Za-z0-9]/g,"")+"_"+uid;
+const staffy=()=>!!prof&&["owner","reception","staff"].includes(prof.role);
+async function init(){
+  db=fb.db;const u=await fb.ready();uid=u?u.uid:null;
+  prof=u&&!u.isAnonymous?await fb.getProfile(u):null;
+  await listen();
+  addEventListener("hashchange",async()=>{tab=null;await listen();render()});
+  setTimeout(()=>{if(!H&&$("#app .center h2")?.textContent==="Loading…")render()},4000);
+}
+async function listen(){
+  subs.forEach(f=>f());subs=[];const e=x=>console.warn(x),rt=route();
+  canEdit=prof?.role==="owner";me=prof?{id:prof.id,name:prof.name,role:prof.dept||prof.role}:null;
+  if(rt.mode==="guest"&&!uid)uid=(await fb.guestSignIn()).uid;
+  subs.push(db.doc("cfg/hotel").onSnapshot(s=>{H=s.data()||null;render()},e),db.doc("cfg/rooms").onSnapshot(s=>{R=s.data()||{};render()},e));
+  const rq=x=>{reqs=x.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.ts-a.ts);render()};
+  if(staffy())subs.push(db.collection("requests").onSnapshot(rq,e),db.collection("chats").onSnapshot(x=>{chats={};x.docs.forEach(d=>chats[d.id]=d.data().msgs||[]);render()},e),db.collection("users").onSnapshot(x=>{S={};x.docs.forEach(d=>{const v=d.data();S[d.id]={name:v.name,role:v.dept||v.role,r:v.role}});render()},e));
+  else if(rt.mode==="guest"&&uid){const k=ck(rt.room);subs.push(db.collection("requests",["guestUid","==",uid]).onSnapshot(rq,e),db.doc("chats/"+k).onSnapshot(x=>{chats={[k]:(x.data()||{}).msgs||[]};render()},e))}
+}
+function head(t,s){return `<header><h1>${esc(t)}</h1><p>${esc(s||"")}</p></header>`}
+function render(keep){
+  if(busy)return;const rt=route(),a=$("#app"),ch=$(".chat"),top=ch?ch.scrollTop:0;
+  if(!H&&!["admin","reception","staff"].includes(rt.mode)){a.innerHTML=head("Hotel Concierge")+`<main><div class="card center"><h3>Not set up yet</h3><p>The hotel owner needs to open the Admin console (add #admin to the link) to enter hotel details.</p></div></main>`;return}
+  if(rt.mode==="guest")return guest(rt);
+  if(["admin","reception","staff"].includes(rt.mode))return staff(rt.mode);
+  if(["gr","gc"].includes(document.activeElement?.id))return;
+  const _r=esc($("#gr")?.value||""),_c=esc($("#gc")?.value||"");
+  a.innerHTML=head(H.name,H.tagline)+`<main><div class="grid"><div class="card"><h3>Guest</h3><p>Open your room’s concierge. Scan the QR code in your room, or enter your room number and access code from your room card.</p><label>Room number</label><input id="gr" placeholder="e.g. 204" value="${_r}"><label>Access code</label><input id="gc" placeholder="Code on your room card" value="${_c}"><p><button class="btn" id="gogo">Enter my room</button></p></div><div class="card"><h3>Staff &amp; owner</h3><p>Reception staff handle guest requests and chats. Owners manage rooms, QR codes and hotel information.</p><p><a href="#reception"><button class="btn o">Reception</button></a> <a href="#staff"><button class="btn o">Staff</button></a> <a href="#admin"><button class="btn o">Owner</button></a></p></div></div></main>`;
+  a.onclick=e=>{if(e.target.id==="gogo"){const r=$("#gr").value.trim().replace(/[^A-Za-z0-9]/g,""),c=$("#gc").value.trim();if(!r||!c)return toast("Enter room number and access code");if(R[r]!==c)return toast("Room number or code not recognised");location.hash="r-"+r+"-"+c}};
+}
+/* ---------- GUEST ---------- */
+function guest({room,code}){
+  const a=$("#app");
+  if(!(room in R)){a.innerHTML=head(H.name)+`<main><div class="card center"><h3>QR code not recognised</h3><p>Please scan the code in your room again or call reception.</p></div></main>`;return}
+  const tabs=[["home","Home","⌂"],["fac","Facilities & Services","✨"],["svc","Hotel Services","🛎"],["hk","Make Request","🔔"],["ai","Concierge","💬"],["offers","Offers","🎁"],["explore","Explore","📍"],["contacts","Hotel Directory","📖"],["pol","Guest Guide","📋"],["info","Wi-Fi &amp; Info","📶"]];
+  tab=tab||"home";const wifi=(H.wifi||"").split("|").map(x=>x.trim());
+  const list=(rows,fn)=>rows.map(fn).join("")||`<p class="mut">Nothing here yet.</p>`;
+  const mine=reqs.filter(r=>r.room===room);let body="";
+  if(tab==="home")body=homeHTML(room);if(tab==="info")body=`<div class="grid"><div class="card"><h3>Wi-Fi</h3><div class="row"><span>Wi-Fi name</span><b>${esc(wifi[0])}</b></div><div class="row"><span>Password</span><b>${esc(wifi[1])}</b></div></div><div class="card"><h3>Timings &amp; property</h3>${list(L(H.hours),r=>`<div class="row"><span>${esc(r[0])}</span><span>${esc(r[1])}</span></div>`)}</div></div>`;
+  if(tab==="fac")body=facHTML(room,mine);if(tab==="svc")body=`<div class="grid">${list(L(H.services),r=>`<div class="card"><h3>${esc(r[0])}</h3><p>${esc(r[1])}</p><button class="btn g" data-svc="${esc(r[0])}">Request</button></div>`)}</div>`;
+  if(tab==="explore")body=`<div class="grid">${list(L(H.explore),r=>`<div class="card"><h3>${esc(r[0])}</h3><p>${esc(r[1])}</p></div>`)}</div>`;
+  if(tab==="offers")body=`<div class="grid">${list(L(H.offers),r=>`<div class="card"><h3>${esc(r[0])}</h3><p>${esc(r[1])}</p><span class="gold">✦ Exclusive for guests</span></div>`)}</div>`;
+  if(tab==="contacts")body=`<div class="card">${list(L(H.contacts),r=>`<div class="row"><span>${esc(r[0])}</span><a href="tel:${esc(r[1])}"><b>${esc(r[1])}</b></a></div>`)}</div>`;
+  if(tab==="pol")body=`<div class="grid">${list(L(H.policies),r=>`<div class="card"><h3>${esc(r[0])}</h3><p>${esc(r[1])}</p></div>`)}</div>`;
+  if(tab==="hk")body=`<div class="grid"><div class="card"><h3>Request items</h3>${L(H.items).map(r=>`<div class="row"><span style="color:inherit">${esc(r[0])}</span><div class="qty"><button data-q="${esc(r[0])}" data-d="-1">−</button><b>${cart[r[0]]||0}</b><button data-q="${esc(r[0])}" data-d="1">+</button></div></div>`).join("")}<label>Custom request</label><textarea id="note" placeholder="Anything else you need?"></textarea><p><button class="btn" id="sendhk">Send to housekeeping</button></p></div>${trk(mine)}</div>`;
+  if(tab==="ai"){const ms=chats[ck(room)]||[];body=`<div class="grid"><div class="card" style="grid-column:1/-1"><h3>AI Concierge</h3><div class="chat">${`<div class="m">Welcome to ${esc(H.name)}. Ask me about facilities, timings or request anything for your room.</div>`+ms.map(m=>`<div class="m ${m.r}">${esc(m.t)}</div>`).join("")}</div><p style="display:flex;gap:8px"><input id="msg" placeholder="Type your question…"><button class="btn" id="sendc">Send</button></p></div>${trk(mine)}</div>`}
+  a.innerHTML=`<div class="shell"><aside class="side"><div class="brand"><h1>${esc(H.name)}</h1><p>${esc(H.tagline)}</p></div><div class="sn">${tabs.map(t=>`<button data-t="${t[0]}" class="${tab===t[0]?"on":""}"><i>${t[2]}</i>${t[1]}</button>`).join("")}</div><div class="wf"><b>Wi-Fi</b><span>${esc(wifi[0])}</span><span>Password: ${esc(wifi[1])}</span></div></aside><section class="stage"><div class="top"><span class="tn">${esc(H.name)}</span><span>${new Date().toLocaleDateString([],{weekday:"long",day:"numeric",month:"short",year:"numeric"})}</span><b id="clk">${new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})}</b></div><main>${body}</main></section></div>`;
+  const c=$(".chat");if(c)c.scrollTop=top||c.scrollHeight;
+  a.onclick=async e=>{const b=e.target.closest("button");if(!b)return;
+    if(b.dataset.t){tab=b.dataset.t;render()}
+    if(b.dataset.q){const k=b.dataset.q;cart[k]=Math.max(0,(cart[k]||0)+ +b.dataset.d);const n=$("#note")?.value;render();if(n)$("#note").value=n}
+    if(b.dataset.svc)ask(room,"Service",b.dataset.svc,"");
+    if(b.id==="sendhk"){const it=Object.entries(cart).filter(x=>x[1]).map(x=>x[1]+"× "+x[0]).join(", "),n=$("#note").value.trim();if(!it&&!n)return toast("Choose an item or write a request");await ask(room,"Housekeeping",it,n);cart={};render()}
+    if(b.dataset.pick){pick=b.dataset.pick;render();setTimeout(()=>$("#rq")?.scrollIntoView({behavior:"smooth",block:"center"}),60)}
+    if(b.id==="sendsv"){const s=$("#svsel").value,t=$("#svtime").value.trim(),n=$("#svnote").value.trim();await ask(room,"Service",s,(t?"Time: "+t+". ":"")+n);pick="";render()}
+    if(b.id==="sendc")chat(room)};
+  const m=$("#msg");if(m)m.onkeydown=e=>{if(e.key==="Enter")chat(room)};
+}
+function homeHTML(room){
+  const T=(t,i,a,b)=>`<button class="tile" data-t="${t}"><i>${i}</i><b>${a}</b><small>${b}</small><span>›</span></button>`,Q=(t,i,a)=>`<button class="qk" data-t="${t}"><i>${i}</i>${a}</button>`;
+  return `<div class="hero" style="${H.hero?`background-image:linear-gradient(180deg,rgba(20,20,18,.4),rgba(20,20,18,.78)),url(${H.hero})`:""}"><div class="hc"><h2>WELCOME,</h2><h1>GUEST</h1><div class="rn">ROOM ${esc(room)}</div><p>We are delighted to have you with us. We wish you a pleasant and comfortable stay.</p></div><div class="tiles">${T("svc","🛎","Room Service","Dining, spa, laundry and more")}${T("hk","🔔","Make Request","Housekeeping, amenities and more")}${T("contacts","📖","Hotel Directory","Phone numbers for every department")}${T("explore","📍","Explore","Discover nearby attractions")}</div></div><div class="qrow">${Q("fac","✨","Facilities")}${Q("info","📶","Wi-Fi &amp; Info")}${Q("offers","🎁","Offers")}${Q("ai","💬","Concierge")}${Q("pol","📋","Guest Guide")}${Q("hk","🧾","My Requests")}${Q("contacts","☎","Contacts")}</div>`}
+function facHTML(room,mine){
+  const sv=L(H.services),fc=L(H.facilities),opts=sv.map(r=>r[0]).concat(fc.map(r=>r[0]));
+  return `<div class="card" id="rq"><h3>Request a service</h3><label>What do you need?</label><select id="svsel">${opts.map(o=>`<option ${o===pick?"selected":""}>${esc(o)}</option>`).join("")}</select><label>Preferred time (optional)</label><input id="svtime" placeholder="e.g. 8:00 PM or as soon as possible"><label>Details</label><textarea id="svnote" placeholder="Anything we should know?"></textarea><p><button class="btn" id="sendsv">Send request</button></p></div><h2 class="sec">Hotel facilities</h2><div class="grid">${fc.map(r=>`<div class="card"><h3>${esc(r[0])}</h3><p>${esc(r[1])}</p>${r[2]?`<p class="gold">${esc(r[2])}</p>`:""}<button class="btn o s" data-pick="${esc(r[0])}">Ask or book</button></div>`).join("")||"<p>No facilities listed yet.</p>"}</div><h2 class="sec">Guest services</h2><div class="grid">${sv.map(r=>`<div class="card"><h3>${esc(r[0])}</h3><p>${esc(r[1])}</p><button class="btn g s" data-pick="${esc(r[0])}">Request</button></div>`).join("")||"<p>No services listed yet.</p>"}</div><h2 class="sec">Your requests</h2><div class="grid">${trk(mine)}</div>`}
+const trk=m=>`<div class="card"><h3>Your requests</h3>${m.map(r=>`<div class="row"><span style="color:inherit">${esc(r.type)}: ${esc(r.items||r.note)}<br><small>${tm(r.ts)}</small></span><span class="chip ${r.status}">${r.status}</span></div>`).join("")||"<p>No requests yet.</p>"}</div>`;
+async function ask(room,type,items,note){try{await db.collection("requests").add({room,type,items,note,status:"pending",ts:Date.now(),guestUid:uid});toast("Request sent to reception")}catch(e){toast("Could not send request")}}
+async function post(room,r,t){const ms=(chats[room]||[]).concat([{r,t,ts:Date.now()}]);chats[room]=ms;await db.doc("chats/"+room).set({room,msgs:ms.slice(-60),ts:Date.now()})}
+async function chat(room){
+  const i=$("#msg"),q=i.value.trim();if(!q||busy)return;i.value="";busy=true;const k=ck(room);
+  await post(k,"guest",q);busy=false;render();
+  let out;
+  try{const r=await fetch("/.netlify/functions/chat",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+await fb.token()},body:JSON.stringify({question:q,history:(chats[k]||[]).slice(-9,-1)})});const j=await r.json();if(!r.ok)throw 0;out=j.text}catch(e){out="I’m unable to answer right now. Please contact reception."}
+  const m=out.match(/\nACTION:\s*(.+)$/);if(m){out=out.replace(/\nACTION:.*$/,"").trim();await ask(room,"Concierge",m[1],"")}
+  await post(k,"ai",out);render();
+}
+async function adm(body){const r=await fetch("/.netlify/functions/staff-admin",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+await fb.token()},body:JSON.stringify(body)});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||"Request failed");return j}
+/* ---------- STAFF / OWNER ---------- */
+function staff(mode){
+  const a=$("#app"),M=Object.entries(S).map(([id,v])=>({id,...v})).sort((x,y)=>x.name.localeCompare(y.name)),title={admin:"Owner Console",reception:"Reception Desk",staff:"Staff Tasks"}[mode],role=prof&&prof.role;
+  const ok=mode==="admin"?role==="owner":mode==="reception"?(role==="owner"||role==="reception"):!!role;
+  if(!ok){
+    a.innerHTML=head(title,H?H.name:"")+`<main><div class="card center" style="max-width:400px;margin:auto"><h3>Sign in</h3>${prof?`<p>Your account does not have access to this page.</p><p><button class="btn o" id="out">Sign out</button></p>`:`<input id="em" type="email" placeholder="Email" autocomplete="username"><input id="pw" type="password" placeholder="Password" autocomplete="current-password" style="margin-top:8px"><p><button class="btn" id="login">Sign in</button></p>`}</div></main>`;
+    a.onclick=async e=>{const id=e.target.id;
+      if(id==="out"){await fb.logout();prof=null;uid=null;await listen();render()}
+      if(id==="login"){try{const u=(await fb.login($("#em").value.trim(),$("#pw").value)).user;uid=u.uid;prof=await fb.getProfile(u);if(!prof){await fb.logout();prof=null;uid=null;toast("This account has no staff role")}await listen();render()}catch(x){toast("Incorrect email or password")}}};
+    const p=$("#pw");if(p)p.onkeydown=e=>{if(e.key==="Enter")$("#login").click()};return}
+  const tabs=mode==="admin"?[["req","Requests"],["stats","Analytics"],["chat","Conversations"],["team","Staff"],["info","Hotel info"],["rooms","Rooms & QR"]]:mode==="reception"?[["req","Requests"],["chat","Conversations"],["team","Staff"]]:[["task","My tasks"]];
+  tabs.push(["out","Sign out"]);tab=tabs.some(t=>t[0]===tab)?tab:tabs[0][0];let b="";const mname=id=>(S[id]||{}).name||"";
+  const pend=reqs.filter(r=>r.status==="pending").length;
+  const rrow=r=>`<div class="row" style="align-items:center;flex-wrap:wrap"><span style="color:inherit"><b>Room ${esc(r.room)}</b> · ${esc(r.type)}<br>${esc(r.items)} ${esc(r.note)}<br><small>${tm(r.ts)}${r.to?` · Assigned to ${esc(mname(r.to)||r.toName)}`:""}</small></span><span style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span class="chip ${r.status}">${r.status}</span>${mode!=="staff"&&(r.status==="pending"||r.status==="accepted")?`<select class="as" data-id="${r.id}" style="width:auto"><option value="">Assign to…</option>${M.filter(m=>m.r==="staff").map(m=>`<option value="${m.id}" ${r.to===m.id?"selected":""}>${esc(m.name)} (${esc(m.role)})</option>`).join("")}</select>`:""}${mode!=="staff"&&r.status==="pending"?`<button class="btn s" data-st="accepted" data-id="${r.id}">Accept</button><button class="btn s r" data-st="rejected" data-id="${r.id}">Reject</button>`:""}${r.status==="accepted"?`<button class="btn s g" data-st="completed" data-id="${r.id}">${mode==="staff"?"Mark done":"Complete"}</button>`:""}</span></div>`;
+  if(tab==="req")b=`<div class="card"><p><select id="flt">${["all","pending","accepted","completed","rejected"].map(x=>`<option ${sel===x?"selected":""}>${x}</option>`).join("")}</select></p>${reqs.filter(r=>sel==="all"||r.status===sel).map(rrow).join("")||"<p>No requests.</p>"}</div>`;
+  if(tab==="stats")b=statsHTML();
+  if(tab==="task"){const mt=reqs.filter(r=>r.to===me.id);b=`<div class="card"><h3>${esc(me.name)} · ${esc(me.role)}</h3>${mt.map(rrow).join("")||"<p>No tasks assigned yet.</p>"}</div>`}
+  if(tab==="team")b=`<div class="grid"><div class="card"><h3>Team</h3>${M.map(m=>`<div class="row"><span style="color:inherit"><b>${esc(m.name)}</b> · ${esc(m.role)}<br><small>${reqs.filter(r=>r.to===m.id&&r.status==="accepted").length} open tasks</small></span>${mode==="admin"?`<button class="btn s r" data-dm="${m.id}">Remove</button>`:""}</div>`).join("")||"<p>No staff added yet.</p>"}</div>${mode==="admin"?`<div class="card"><h3>Add staff member</h3><label>Name</label><input id="mn"><label>Email</label><input id="me" type="email"><label>Department</label><input id="mr" placeholder="Housekeeping, Maintenance…"><label>Access</label><select id="mt"><option value="staff">Staff (own tasks)</option><option value="reception">Reception</option></select><label>Temporary password (8+ characters)</label><input id="mp" type="password" autocomplete="new-password"><p><button class="btn" id="addm">Add</button></p></div>`:""}</div>`;
+  if(tab==="chat")b=`<div class="grid">${Object.keys(chats).map(k=>`<div class="card"><h3>Room ${esc(k.split("_")[0])}</h3><div class="chat" style="height:200px">${chats[k].map(m=>`<div class="m ${m.r}">${esc(m.t)}</div>`).join("")}</div><p style="display:flex;gap:6px"><input id="rp-${esc(k)}" placeholder="Reply as staff…"><button class="btn s" data-rp="${esc(k)}">Send</button></p></div>`).join("")||'<div class="card">No conversations yet.</div>'}</div>`;
+  if(tab==="info"){const h=H||{};b=`<div class="card"><h3>Hotel information</h3>${fields.map(f=>`<label>${f[1]}</label>${f[0]==="wifi"?`<input id="wn" placeholder="Wi-Fi name" value="${esc((h.wifi||"").split("|")[0])}"><input id="wp" style="margin-top:6px" placeholder="Wi-Fi password" value="${esc((h.wifi||"").split("|")[1])}">`:["name","tagline"].includes(f[0])?`<input id="f-${f[0]}" value="${esc(h[f[0]])}">`:`<textarea id="f-${f[0]}">${esc(h[f[0]])}</textarea>`}`).join("")}<label>Home screen photo (saves automatically)</label><input type="file" id="hero" accept="image/*"><p><button class="btn" id="savei">Save changes</button></p></div>`}
+  if(tab==="rooms"){const base=location.href.split("#")[0];b=`<div class="card"><h3>Rooms</h3><p style="display:flex;gap:8px"><input id="nr" placeholder="Room number e.g. 204"><button class="btn" id="addr">Add room</button></p></div><div class="qrs" style="margin-top:14px">${Object.keys(R).sort().map(k=>`<div class="card"><b>Room ${esc(k)}</b><div class="q" data-qr="${esc(base)}#r-${esc(k)}"></div><button class="btn s o" data-cp="${esc(k)}">Copy link</button> <button class="btn s r" data-dr="${esc(k)}">Delete</button></div>`).join("")}</div>`}
+  a.innerHTML=head(title,H?H.name:"Set up your hotel")+`<nav>${tabs.map(t=>`<button data-t="${t[0]}" class="${tab===t[0]?"on":""}">${t[1]}${t[0]==="req"&&pend?` (${pend})`:""}</button>`).join("")}</nav><main>${!H&&tab!=="info"?`<div class="card">Start in “Hotel info”.</div>`:b}</main>`;
+  document.querySelectorAll("[data-qr]").forEach(el=>{try{new QRCode(el,{text:el.dataset.qr,width:130,height:130})}catch(e){}});
+  const f=$("#flt");if(f)f.onchange=()=>{sel=f.value;render()};
+  const hv=$("#hero");if(hv)hv.onchange=()=>{const fl=hv.files[0];if(!fl)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=async()=>{const c=document.createElement("canvas"),s=Math.min(1,1200/im.width);c.width=im.width*s;c.height=im.height*s;c.getContext("2d").drawImage(im,0,0,c.width,c.height);let q=.75,d=c.toDataURL("image/jpeg",q);while(d.length>150000&&q>.25){q-=.1;d=c.toDataURL("image/jpeg",q)}try{await db.doc("cfg/hotel").update({hero:d});toast("Photo saved")}catch(x){toast("Photo too large")}};im.src=r.result};r.readAsDataURL(fl)};
+  a.onchange=async e=>{const t=e.target;if(t.classList.contains("as")&&t.value){const m=S[t.value];await db.doc("requests/"+t.dataset.id).update({to:t.value,toName:m?m.name:"",status:"accepted"});toast("Task assigned")}};
+  a.onclick=async e=>{const b=e.target.closest("button");if(!b)return;const d=b.dataset;
+    if(d.per){per=d.per;render();return}
+    if(d.t==="out"){await fb.logout();prof=null;uid=null;await listen();render();return}
+    if(d.t){tab=d.t;render()}
+    if(b.id==="addm"){try{await adm({action:"create",name:$("#mn").value.trim(),email:$("#me").value.trim(),dept:$("#mr").value.trim(),role:$("#mt").value,password:$("#mp").value});toast("Account created")}catch(x){toast(x.message)}}
+    if(d.dm){try{await adm({action:"delete",uid:d.dm});toast("Account removed")}catch(x){toast(x.message)}}
+    if(d.st)await db.doc("requests/"+d.id).update(d.st==="completed"?{status:d.st,doneAt:Date.now()}:{status:d.st});
+    if(d.rp){const i=$("#rp-"+d.rp),t=i.value.trim();if(t)await post(d.rp,"staff",t)}
+    if(b.id==="savei"){const o={};fields.forEach(f=>o[f[0]]=f[0]==="wifi"?$("#wn").value.trim()+"|"+$("#wp").value.trim():$("#f-"+f[0]).value);await db.doc("cfg/hotel").update(o);toast("Saved")}
+    if(b.id==="addr"){const k=$("#nr").value.trim().replace(/[^A-Za-z0-9]/g,"");if(k){await db.doc("cfg/rooms").set({...R,[k]:code()});toast("Room added")}}
+    if(d.rg)await db.doc("cfg/rooms").set({...R,[d.rg]:code()});
+    if(d.dr){const n={...R};delete n[d.dr];await db.doc("cfg/rooms").set(n);toast("Room deleted")}
+    if(d.cp){const u=location.href.split("#")[0]+"#r-"+d.cp;try{await navigator.clipboard.writeText(u);toast("Link copied")}catch(x){prompt("Copy link",u)}}};
+}
+const hp=async s=>[...new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode("aurelia:"+s)))].map(b=>b.toString(16).padStart(2,"0")).join("");
+const code=()=>Array.from(crypto.getRandomValues(new Uint8Array(8)),b=>"abcdefghjkmnpqrstuvwxyz23456789"[b%31]).join("");
+setInterval(()=>{const c=$("#clk");if(c)c.textContent=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})},1000);
+let lastKey="",io;
+new MutationObserver(()=>{
+  const key=location.hash+"|"+tab,same=key===lastKey;lastKey=key;
+  const els=[...document.querySelectorAll("#app main .card")];
+  if(same||matchMedia("(prefers-reduced-motion:reduce)").matches){els.forEach(e=>e.classList.add("in"));return}
+  document.querySelector("#app header")?.classList.add("hd");
+  io&&io.disconnect();
+  io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){const t=x.target;t.classList.add("in");io.unobserve(t);setTimeout(()=>t.style.transitionDelay="",1000)}}),{threshold:.06});
+  els.forEach((e,i)=>{e.style.transitionDelay=Math.min(i,6)*80+"ms";io.observe(e)});
+}).observe($("#app"),{childList:true});
+const _th=(()=>{try{return localStorage.getItem("th")}catch(e){return null}})(),_tb=document.createElement("button");
+_tb.className="btn s";_tb.id="tt";_tb.setAttribute("aria-label","Switch theme");
+const _set=v=>{document.documentElement.dataset.theme=v;_tb.textContent=v==="night"?"☀ Light":"☾ Night";try{localStorage.setItem("th",v)}catch(e){}};
+_tb.onclick=()=>_set(document.documentElement.dataset.theme==="night"?"light":"night");
+_set("light");
+init();
+</script></body></html>

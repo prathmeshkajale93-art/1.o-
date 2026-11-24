@@ -1,0 +1,50 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signed() { return request.auth != null; }
+    function role() {
+      return signed() && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        ? get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role : null;
+    }
+    function owner() { return role() == 'owner'; }
+    function recv() { return role() in ['owner', 'reception']; }
+    function anyStaff() { return role() in ['owner', 'reception', 'staff']; }
+
+    // Public hotel info and room list: readable by guests, writable only by the owner.
+    match /cfg/{id} {
+      allow read: if id in ['hotel', 'rooms'];
+      allow write: if owner() && id in ['hotel', 'rooms'];
+    }
+
+    // Staff profiles are created only by the secure backend (Admin SDK bypasses rules).
+    match /users/{uid} {
+      allow read: if signed() && (request.auth.uid == uid || anyStaff());
+      allow write: if false;
+    }
+
+    match /requests/{id} {
+      // A guest can only read requests created by their own anonymous session.
+      allow read: if anyStaff() || (signed() && resource.data.guestUid == request.auth.uid);
+      allow create: if signed()
+        && request.resource.data.keys().hasOnly(['room','type','items','note','status','ts','guestUid'])
+        && request.resource.data.guestUid == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.room is string && request.resource.data.room.size() <= 20
+        && request.resource.data.type is string && request.resource.data.type.size() <= 40
+        && request.resource.data.items is string && request.resource.data.items.size() <= 500
+        && request.resource.data.note is string && request.resource.data.note.size() <= 1000
+        && get(/databases/$(database)/documents/cfg/rooms).data.keys().hasAny([request.resource.data.room]);
+      allow update: if (recv() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','to','toName','doneAt']))
+        || (role() == 'staff' && resource.data.get('to', '') == request.auth.uid
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','doneAt']));
+      allow delete: if owner();
+    }
+
+    // Chat docs are named <room>_<guestUid>: a guest can only touch their own.
+    match /chats/{id} {
+      allow read: if anyStaff() || (signed() && id.matches('.*_' + request.auth.uid));
+      allow write: if anyStaff() || (signed() && id.matches('.*_' + request.auth.uid)
+        && request.resource.data.msgs.size() <= 60);
+    }
+  }
+}
